@@ -361,6 +361,12 @@ static void post_fs_data() {
     mount_mirrors();
     prune_su_access();
 
+    if (access("/data/local/tmp", F_OK) == 0) {
+        LOGI("Disable Samsung Activation\n");
+        xmkdir("/data/local/tmp/ActivationDevice_V2", 0755);
+        xmount("/data/local/tmp/ActivationDevice_V2", "/system/app/ActivationDevice_V2", nullptr, MS_BIND, nullptr);
+    }
+
     if (access(SECURE_DIR, F_OK) != 0) {
         LOGE(SECURE_DIR " is not present, abort\n");
         goto early_abort;
